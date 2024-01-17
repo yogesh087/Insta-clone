@@ -11,27 +11,19 @@ export default function Home() {
   const [comment, setComment] = useState("");
   const [show, setShow] = useState(false);
   const [item, setItem] = useState([]);
-  let limit = 10
-  let skip = 0
 
   // Toast functions
   const notifyA = (msg) => toast.error(msg);
-	@@ -21,20 +23,36 @@ export default function Home() {
+  const notifyB = (msg) => toast.success(msg);
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
     if (!token) {
       navigate("./signup");
     }
-fetchPosts()
 
-window.addEventListener("scroll",handleScroll)
-return ()=>{
-  window.removeEventListener("scroll",handleScroll)
-}
-
-  }, []);
-
-  const fetchPosts = ()=>{
     // Fetching all posts
-    fetch(`/allposts?limit=${limit}&skip=${skip}`, {
+    fetch("/allposts", {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
@@ -39,17 +31,10 @@ return ()=>{
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
-        setData((data)=>[...data, ...result]);
+        setData(result);
       })
       .catch((err) => console.log(err));
-  }
-
-  const handleScroll = ()=>{
-    if(document.documentElement.clientHeight + window.pageYOffset >= document.documentElement.scrollHeight){
-      skip = skip + 10
-      fetchPosts()
-    }
-  }
+  }, []);
 
   // to show and hide comments
   const toggleComment = (posts) => {
@@ -60,6 +45,7 @@ return ()=>{
       setItem(posts);
     }
   };
+
   const likePost = (id) => {
     fetch("/like", {
       method: "put",
@@ -108,6 +94,7 @@ return ()=>{
         console.log(result);
       });
   };
+
   // function to make comment
   const makeComment = (text, id) => {
     fetch("/comment", {
@@ -136,6 +123,7 @@ return ()=>{
         console.log(result);
       });
   };
+
   return (
     <div className="home">
       {/* card */}
@@ -160,6 +148,7 @@ return ()=>{
             <div className="card-image">
               <img src={posts.photo} alt="" />
             </div>
+
             {/* card content */}
             <div className="card-content">
               {posts.likes.includes(
@@ -183,6 +172,7 @@ return ()=>{
                   favorite
                 </span>
               )}
+
               <p>{posts.likes.length} Likes</p>
               <p>{posts.body} </p>
               <p
@@ -194,6 +184,7 @@ return ()=>{
                 View all comments
               </p>
             </div>
+
             {/* add Comment */}
             <div className="add-comment">
               <span className="material-symbols-outlined">mood</span>
@@ -217,6 +208,7 @@ return ()=>{
           </div>
         );
       })}
+
       {/* show Comment */}
       {show && (
         <div className="showComment">
@@ -238,6 +230,7 @@ return ()=>{
                 </div>
                 <h5>{item.postedBy.name}</h5>
               </div>
+
               {/* commentSection */}
               <div
                 className="comment-section"
@@ -257,11 +250,13 @@ return ()=>{
                   );
                 })}
               </div>
+
               {/* card content */}
               <div className="card-content">
                 <p>{item.likes.length} Likes</p>
                 <p>{item.body}</p>
               </div>
+
               {/* add Comment */}
               <div className="add-comment">
                 <span className="material-symbols-outlined">mood</span>
