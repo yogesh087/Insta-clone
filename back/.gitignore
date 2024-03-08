@@ -1,2 +1,4 @@
-node_modules
-
+/node_modules
+/package-locl.json
+/frontend/node_modules
+/frontend/package-lock.json
