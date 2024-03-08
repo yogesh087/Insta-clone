@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const { mongoUrl } = require("./keys");
 const cors = require("cors");
 const path = require("path")
+//  const __dirname=path.resolve();
 
 app.use(cors())
 require('./models/model')
